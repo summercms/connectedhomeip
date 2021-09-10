@@ -302,7 +302,6 @@ typedef void (*AsyncWorkFunct)(intptr_t arg);
 #include <ble/BleConfig.h>
 #include <inet/InetLayer.h>
 #include <system/SystemEvent.h>
-#include <system/SystemObject.h>
 #include <system/SystemPacketBuffer.h>
 
 namespace chip {
@@ -321,7 +320,7 @@ struct ChipDeviceEvent final
         struct
         {
             ::chip::System::EventType Type;
-            ::chip::System::Object * Target;
+            void * Target;
             uintptr_t Argument;
         } ChipSystemLayerEvent;
         struct

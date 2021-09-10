@@ -30,8 +30,8 @@
 
 #include "inet/IPEndPointBasis.h"
 #include <inet/IPAddress.h>
-
 #include <system/SystemPacketBuffer.h>
+#include <system/SystemPool.h>
 
 #if CHIP_SYSTEM_CONFIG_USE_DISPATCH
 #include <dispatch/dispatch.h>
@@ -43,6 +43,13 @@ namespace Inet {
 class InetLayer;
 class IPPacketInfo;
 
+class RawEndPoint;
+class RawEndPointDeletor
+{
+public:
+    static void Release(RawEndPoint* obj);
+};
+
 /**
  * @brief   Objects of this class represent raw IP network endpoints.
  *
@@ -51,7 +58,7 @@ class IPPacketInfo;
  *  endpoints (SOCK_RAW sockets on Linux and BSD-derived systems) or LwIP
  *  raw protocol control blocks, as the system is configured accordingly.
  */
-class DLL_EXPORT RawEndPoint : public IPEndPointBasis
+class DLL_EXPORT RawEndPoint : public IPEndPointBasis, public AtomicReferenceCounted<RawEndPoint, RawEndPointDeletor>
 {
     friend class InetLayer;
 
@@ -91,6 +98,7 @@ public:
 private:
     RawEndPoint(const RawEndPoint &) = delete;
 
+    friend class RawEndPointDeletor;
     static chip::System::ObjectPool<RawEndPoint, INET_CONFIG_NUM_RAW_ENDPOINTS> sPool;
 
     void Init(InetLayer * inetLayer, IPVersion ipVer, IPProtocol ipProto);
@@ -119,6 +127,11 @@ private:
 #endif // CHIP_SYSTEM_CONFIG_USE_DISPATCH
 #endif // CHIP_SYSTEM_CONFIG_USE_SOCKETS
 };
+
+inline void RawEndPointDeletor::Release(RawEndPoint* obj)
+{
+    RawEndPoint::sPool.ReleaseObject(obj);
+}
 
 } // namespace Inet
 } // namespace chip

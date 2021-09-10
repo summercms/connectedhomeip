@@ -532,7 +532,7 @@ CHIP_ERROR InetLayer::NewRawEndPoint(IPVersion ipVer, IPProtocol ipProto, RawEnd
 
     VerifyOrReturnError(State == kState_Initialized, CHIP_ERROR_INCORRECT_STATE);
 
-    *retEndPoint = RawEndPoint::sPool.TryCreate();
+    *retEndPoint = RawEndPoint::sPool.CreateObject();
     if (*retEndPoint == nullptr)
     {
         ChipLogError(Inet, "%s endpoint pool FULL", "Raw");
@@ -572,7 +572,7 @@ CHIP_ERROR InetLayer::NewTCPEndPoint(TCPEndPoint ** retEndPoint)
 
     VerifyOrReturnError(State == kState_Initialized, CHIP_ERROR_INCORRECT_STATE);
 
-    *retEndPoint = TCPEndPoint::sPool.TryCreate();
+    *retEndPoint = TCPEndPoint::sPool.CreateObject();
     if (*retEndPoint == nullptr)
     {
         ChipLogError(Inet, "%s endpoint pool FULL", "TCP");
@@ -612,7 +612,7 @@ CHIP_ERROR InetLayer::NewUDPEndPoint(UDPEndPoint ** retEndPoint)
 
     VerifyOrReturnError(State == kState_Initialized, CHIP_ERROR_INCORRECT_STATE);
 
-    *retEndPoint = UDPEndPoint::sPool.TryCreate();
+    *retEndPoint = UDPEndPoint::sPool.CreateObject();
     if (*retEndPoint == nullptr)
     {
         ChipLogError(Inet, "%s endpoint pool FULL", "UDP");
@@ -787,7 +787,7 @@ CHIP_ERROR InetLayer::ResolveHostAddress(const char * hostName, uint16_t hostNam
     VerifyOrExit(hostNameLen <= NL_DNS_HOSTNAME_MAX_LEN, err = INET_ERROR_HOST_NAME_TOO_LONG);
     VerifyOrExit(maxAddrs > 0, err = CHIP_ERROR_NO_MEMORY);
 
-    resolver = DNSResolver::sPool.TryCreate();
+    resolver = DNSResolver::sPool.CreateObject();
     if (resolver != nullptr)
     {
         resolver->InitInetLayerBasis(*this);
@@ -819,7 +819,7 @@ CHIP_ERROR InetLayer::ResolveHostAddress(const char * hostName, uint16_t hostNam
             onComplete(appState, err, (err == CHIP_NO_ERROR) ? 1 : 0, addrArray);
         }
 
-        resolver->Release();
+        DNSResolver::sPool.ReleaseObject(resolver);
         resolver = nullptr;
 
         ExitNow(err = CHIP_NO_ERROR);

@@ -29,7 +29,6 @@
 
 #include <lib/support/BitFlags.h>
 #include <lib/support/DLLUtil.h>
-#include <system/SystemObject.h>
 
 #include <stdint.h>
 #include <type_traits>
@@ -51,11 +50,13 @@ class InetLayer;
  *    InetLayer object.
  *
  */
-class InetLayerBasis : public chip::System::Object
+class InetLayerBasis
 {
 public:
     InetLayer & Layer() const;
     bool IsCreatedByInetLayer(const InetLayer & aInetLayer) const;
+
+    void * AppState;
 
 protected:
     void InitInetLayerBasis(InetLayer & aInetLayer, void * aAppState = nullptr);

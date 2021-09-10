@@ -31,7 +31,7 @@
 #include <inet/InetError.h>
 #include <inet/InetInterface.h>
 #include <inet/InetLayerEvents.h>
-
+#include <lib/core/ReferenceCounted.h>
 #include <lib/support/DLLUtil.h>
 
 #if CHIP_SYSTEM_CONFIG_USE_SOCKETS

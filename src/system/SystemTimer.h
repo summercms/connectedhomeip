@@ -35,8 +35,9 @@
 
 #include <system/SystemClock.h>
 #include <system/SystemError.h>
+#include <system/SystemLayer.h>
 #include <system/SystemMutex.h>
-#include <system/SystemObject.h>
+#include <system/SystemPool.h>
 #include <system/SystemStats.h>
 
 #if CHIP_SYSTEM_CONFIG_USE_DISPATCH
@@ -57,7 +58,7 @@ using TimerCompleteCallback = void (*)(Layer * aLayer, void * appState);
 /**
  * This is an Object-pool based class that System::Layer implementations can use to assist in providing timer functions.
  */
-class DLL_EXPORT Timer : public Object
+class DLL_EXPORT Timer
 {
 public:
     /**
@@ -218,6 +219,13 @@ public:
     {
         sPool.GetStatistics(aNumInUse, aHighWatermark);
     }
+
+    static void ReleaseTimer(Timer * timer)
+    {
+        sPool.ReleaseObject(timer);
+    }
+
+    void * AppState;
 
 private:
     friend class LayerImplLwIP;

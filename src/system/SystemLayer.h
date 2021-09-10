@@ -35,8 +35,6 @@
 #include <lib/support/ObjectLifeCycle.h>
 #include <system/SystemError.h>
 #include <system/SystemEvent.h>
-#include <system/SystemObject.h>
-#include <system/SystemTimer.h>
 
 #if CHIP_SYSTEM_CONFIG_USE_SOCKETS
 #include <system/SocketEvents.h>

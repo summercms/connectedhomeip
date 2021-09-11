@@ -47,7 +47,7 @@ class RawEndPoint;
 class RawEndPointDeletor
 {
 public:
-    static void Release(RawEndPoint* obj);
+    static void Release(RawEndPoint * obj);
 };
 
 /**
@@ -128,7 +128,7 @@ private:
 #endif // CHIP_SYSTEM_CONFIG_USE_SOCKETS
 };
 
-inline void RawEndPointDeletor::Release(RawEndPoint* obj)
+inline void RawEndPointDeletor::Release(RawEndPoint * obj)
 {
     RawEndPoint::sPool.ReleaseObject(obj);
 }

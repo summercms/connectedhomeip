@@ -220,10 +220,7 @@ public:
         sPool.GetStatistics(aNumInUse, aHighWatermark);
     }
 
-    static void ReleaseTimer(Timer * timer)
-    {
-        sPool.ReleaseObject(timer);
-    }
+    static void ReleaseTimer(Timer * timer) { sPool.ReleaseObject(timer); }
 
     void * AppState;
 
